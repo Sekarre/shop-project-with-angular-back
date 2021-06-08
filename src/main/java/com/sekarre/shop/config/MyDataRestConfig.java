@@ -1,7 +1,9 @@
 package com.sekarre.shop.config;
 
+import com.sekarre.shop.entity.Country;
 import com.sekarre.shop.entity.Product;
 import com.sekarre.shop.entity.ProductCategory;
+import com.sekarre.shop.entity.State;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -22,8 +24,9 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.PATCH, HttpMethod.DELETE};
 
-        setUnsupportedActions(config, theUnsupportedActions, Product.class);
-        setUnsupportedActions(config, theUnsupportedActions, ProductCategory.class);
+        Class<?>[] classesToRestrict = {Product.class, ProductCategory.class, Country.class, State.class};
+
+        setUnsupportedActions(config, theUnsupportedActions, classesToRestrict);
 
         exposeIds(config);
     }
@@ -37,10 +40,14 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     }
 
 
-    private void setUnsupportedActions(RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions, Class<?> type) {
-        config.getExposureConfiguration()
-                .forDomainType(type)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
+    private void setUnsupportedActions(RepositoryRestConfiguration config,
+                                       HttpMethod[] theUnsupportedActions,
+                                       Class<?>... types) {
+        for (Class<?> type : types) {
+            config.getExposureConfiguration()
+                    .forDomainType(type)
+                    .withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
+                    .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
+        }
     }
 }
