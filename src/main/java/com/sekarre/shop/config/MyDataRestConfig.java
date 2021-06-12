@@ -1,9 +1,6 @@
 package com.sekarre.shop.config;
 
-import com.sekarre.shop.entity.Country;
-import com.sekarre.shop.entity.Product;
-import com.sekarre.shop.entity.ProductCategory;
-import com.sekarre.shop.entity.State;
+import com.sekarre.shop.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +25,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.PATCH, HttpMethod.DELETE};
 
-        Class<?>[] classesToRestrict = {Product.class, ProductCategory.class, Country.class, State.class};
+        Class<?>[] classesToRestrict = {Product.class, ProductCategory.class, Country.class, State.class, Order.class};
 
         setUnsupportedActions(config, theUnsupportedActions, classesToRestrict);
 
