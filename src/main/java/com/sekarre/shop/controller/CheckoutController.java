@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@CrossOrigin
 @RestController
 @RequestMapping("/api/checkout")
 public class CheckoutController {

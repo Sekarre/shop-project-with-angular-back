@@ -5,6 +5,7 @@ import com.sekarre.shop.entity.Product;
 import com.sekarre.shop.entity.ProductCategory;
 import com.sekarre.shop.entity.State;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -20,6 +21,9 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 
     private final EntityManager entityManager;
 
+    @Value("${allowed.origins}")
+    private String[] allowedOrigins;
+
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.PATCH, HttpMethod.DELETE};
@@ -29,6 +33,9 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         setUnsupportedActions(config, theUnsupportedActions, classesToRestrict);
 
         exposeIds(config);
+
+        //configure cors mapping
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(allowedOrigins);
     }
 
 
